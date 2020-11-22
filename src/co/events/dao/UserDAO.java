@@ -3,6 +3,7 @@ package co.events.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import co.events.helper.Crypto;
@@ -51,5 +52,25 @@ public class UserDAO {
 		statement.close();
 		disconnect();
 		return result;
+	}
+	
+	public boolean login(User user) throws SQLException {
+		boolean out = false;
+		String sql = "SELECT user_password FROM users WHERE user_email = ?";
+		connect();
+		
+		PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+		statement.setString(1, user.getEmail());
+		
+		ResultSet res = statement.executeQuery();
+		
+		if (res.next()) {
+			if (Crypto.hash(user.getPassword()).equals(res.getString("user_password"))) out = true;
+		}
+		
+		res.close();
+		statement.close();
+		disconnect();
+		return out;
 	}
 }

@@ -31,15 +31,14 @@ public class Servlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getServletPath();
 		
-//		try {
-			switch (path) {
-			case "/register":
-				userRegisterGet(request, response);
-				break;
-			}
-//		} catch (SQLException e) {
-//			throw new ServletException(e);
-//		}
+		switch (path) {
+		case "/register":
+			userRegisterGet(request, response);
+			break;
+		case "/login":
+			userLoginGet(request, response);
+			break;
+		}
 	}
 	
 	@Override
@@ -50,6 +49,9 @@ public class Servlet extends HttpServlet {
 			switch (path) {
 			case "/register":
 				userRegisterPost(request, response);
+				break;
+			case "/login":
+				userLoginPost(request, response);
 				break;
 			}
 		} catch (SQLException e) {
@@ -70,5 +72,23 @@ public class Servlet extends HttpServlet {
 		User newUser = new User(name, email, password);
 		userDAO.register(newUser);
 		response.sendRedirect("login");
+	}
+	
+	private void userLoginGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatch = request.getRequestDispatcher("login.jsp");
+		dispatch.forward(request, response);
+	}
+	
+	private void userLoginPost(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		
+		User newUser = new User(email, password);
+		boolean result = userDAO.login(newUser);
+		if (result) {
+			response.sendRedirect("home");
+		} else {
+			response.sendRedirect("login");
+		}
 	}
 }
