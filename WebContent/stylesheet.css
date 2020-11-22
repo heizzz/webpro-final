@@ -1,0 +1,13 @@
+.jumbotron {
+	border-radius: 20px;
+	background-color: #ecf0f1;
+	transform-style: preserve-3d;
+}
+
+.jumbotron h1 {
+	transform: translateZ(80px);
+}
+
+.jumbotron .lead {
+	transform: translateZ(50px);
+}

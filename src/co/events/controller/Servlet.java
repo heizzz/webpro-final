@@ -32,6 +32,9 @@ public class Servlet extends HttpServlet {
 		String path = request.getServletPath();
 		
 		switch (path) {
+		case "/":
+			welcome(request, response);
+			break;
 		case "/register":
 			userRegisterGet(request, response);
 			break;
@@ -40,7 +43,7 @@ public class Servlet extends HttpServlet {
 			break;
 		}
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getServletPath();
@@ -58,6 +61,11 @@ public class Servlet extends HttpServlet {
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		}
+	}
+	
+	private void welcome(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatch = request.getRequestDispatcher("welcome.jsp");
+		dispatch.forward(request, response);
 	}
 	
 	private void userRegisterGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
