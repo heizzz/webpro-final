@@ -54,9 +54,9 @@ public class UserDAO {
 		return result;
 	}
 	
-	public boolean login(User user) throws SQLException {
-		boolean out = false;
-		String sql = "SELECT user_password FROM users WHERE user_email = ?";
+	public User login(User user) throws SQLException {
+		User out = null;
+		String sql = "SELECT user_name, user_email, user_password FROM users WHERE user_email = ?";
 		connect();
 		
 		PreparedStatement statement = jdbcConnection.prepareStatement(sql);
@@ -65,7 +65,7 @@ public class UserDAO {
 		ResultSet res = statement.executeQuery();
 		
 		if (res.next()) {
-			if (Crypto.hash(user.getPassword()).equals(res.getString("user_password"))) out = true;
+			if (Crypto.hash(user.getPassword()).equals(res.getString("user_password"))) out = new User(res.getString("user_name"), res.getString("user_email"), res.getString("user_password"));
 		}
 		
 		res.close();

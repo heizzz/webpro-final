@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import co.events.dao.EventDAO;
 import co.events.dao.UserDAO;
@@ -63,6 +64,9 @@ public class Servlet extends HttpServlet {
         case "/update":
             updateEvent(request, response);
             break;
+		case "/logout":
+			userLogout(request, response);
+			break;
 		}
 		 } catch (SQLException ex) {
 	            throw new ServletException(ex);
@@ -94,6 +98,11 @@ public class Servlet extends HttpServlet {
 	}
 	
 	private void userRegisterGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("name") != null) {
+			response.sendRedirect("dashboard");
+			return;
+		}
 		RequestDispatcher dispatch = request.getRequestDispatcher("register.jsp");
 		dispatch.forward(request, response);
 	}
@@ -109,6 +118,11 @@ public class Servlet extends HttpServlet {
 	}
 	
 	private void userLoginGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("name") != null) {
+			response.sendRedirect("dashboard");
+			return;
+		}
 		RequestDispatcher dispatch = request.getRequestDispatcher("login.jsp");
 		dispatch.forward(request, response);
 	}
@@ -117,10 +131,12 @@ public class Servlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
-		User newUser = new User(email, password);
-		boolean result = userDAO.login(newUser);
-		if (result) {
-			response.sendRedirect("home");
+		User formUser = new User(email, password);
+		User user = userDAO.login(formUser);
+		if (user != null) {
+			HttpSession session = request.getSession();
+			session.setAttribute("name", user.getName());
+			response.sendRedirect("dashboard");
 		} else {
 			response.sendRedirect("login");
 		}
@@ -199,4 +215,10 @@ public class Servlet extends HttpServlet {
         response.sendRedirect("list");
  
     }
+	
+	private void userLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		session.invalidate();
+		response.sendRedirect(".");
+	}
 }
