@@ -53,6 +53,7 @@ public class Servlet extends HttpServlet {
 			case "/login":
 				userLoginPost(request, response);
 				break;
+				
 			}
 		} catch (SQLException e) {
 			throw new ServletException(e);
