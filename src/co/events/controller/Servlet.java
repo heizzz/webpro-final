@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,43 +33,42 @@ public class Servlet extends HttpServlet {
 		String jdbcPassword = getServletContext().getInitParameter("jdbcPassword");
 		
 		userDAO = new UserDAO(jdbcURL, jdbcUsername, jdbcPassword);
+		eventDAO = new EventDAO(jdbcURL, jdbcUsername, jdbcPassword);
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String path = request.getServletPath();
 		try {
-		switch (path) {
-		case "/":
-			welcome(request, response);
-			break;
-		case "/register":
-			userRegisterGet(request, response);
-			break;
-		case "/login":
-			userLoginGet(request, response);
-			break;
-		case "/home":
-			listEvent(request, response);
-		case "/create":
-            insertEvent(request, response);
-            break;
-        case "/delete":
-            deleteEvent(request, response);
-            break;
-        case "/edit":
-            showEditForm(request, response);
-            break;
-        case "/update":
-            updateEvent(request, response);
-            break;
-		case "/logout":
-			userLogout(request, response);
-			break;
+			switch (path) {
+			case "/":
+				welcome(request, response);
+				break;
+			case "/register":
+				userRegisterGet(request, response);
+				break;
+			case "/login":
+				userLoginGet(request, response);
+				break;
+			case "/logout":
+				userLogout(request, response);
+				break;
+			case "/dashboard":
+				dashboard(request, response);
+				break;
+			case "/create":
+	            eventCreateGet(request, response);
+	            break;
+	        case "/edit":
+	            eventEditGet(request, response);
+	            break;
+	        case "/delete":
+	            eventDelete(request, response);
+	            break;
+			}
+		} catch (SQLException ex) {
+			throw new ServletException(ex);
 		}
-		 } catch (SQLException ex) {
-	            throw new ServletException(ex);
-	        }
 	}
 
 	@Override
@@ -85,7 +83,12 @@ public class Servlet extends HttpServlet {
 			case "/login":
 				userLoginPost(request, response);
 				break;
-				
+			case "/create":
+	            eventCreatePost(request, response);
+	            break;
+	        case "/edit":
+	            eventEditPost(request, response);
+	            break;
 			}
 		} catch (SQLException e) {
 			throw new ServletException(e);
@@ -136,89 +139,91 @@ public class Servlet extends HttpServlet {
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("name", user.getName());
+			session.setAttribute("id", user.getUser_id());
 			response.sendRedirect("dashboard");
 		} else {
 			response.sendRedirect("login");
 		}
 	}
-    private void listEvent(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException {
-        List<Event> listEvent = eventDAO.allEvents();
-        request.setAttribute("listEvent", listEvent);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-        dispatcher.forward(request, response);
-    }
- 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
-        dispatcher.forward(request, response);
-    }
- 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Event existingEvent = eventDAO.getEvent(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
-        request.setAttribute("event", existingEvent);
-        dispatcher.forward(request, response);
- 
-    }
-    
-    // belum handle user_id (pake session)
-    private void insertEvent(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException {
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-    	int user_id = 1;
-        String name  = request.getParameter("title");
-        int price = Integer.parseInt(request.getParameter("author"));
-        String place = request.getParameter("author");
-        String desc = request.getParameter("author");
-        String start1 = request.getHeader("author");
-        String end1 = request.getHeader("author");
-        Timestamp start = null;
-        Timestamp end = null;
-        Date start2;
-		try {
-			start2 = dateFormat.parse(start1);
-			start = new java.sql.Timestamp(start2.getTime());
-			Date end2 = dateFormat.parse(end1);
-	        end = new java.sql.Timestamp(end2.getTime());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        Event newEvent = new Event(user_id, name, price, place, desc, start, end);
-        eventDAO.insertEvent(newEvent);
-        response.sendRedirect("list");
-    }
- 
-    private void updateEvent(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String title = request.getParameter("title");
-        String author = request.getParameter("author");
-        float price = Float.parseFloat(request.getParameter("price"));
- 
-//        Event event = new Event(id, title, author, price);
-//        eventDAO.updateEvent(event);
-        response.sendRedirect("list");
-    }
- 
-    private void deleteEvent(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
- 
-        Event event = new Event(id);
-        eventDAO.deleteEvent(event);
-        response.sendRedirect("list");
- 
-    }
 	
 	private void userLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		session.invalidate();
 		response.sendRedirect(".");
 	}
+	
+    private void dashboard(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        List<Event> listEvent = eventDAO.allEvents();
+        request.setAttribute("listEvent", listEvent);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("dashboard.jsp");
+        dispatcher.forward(request, response);
+    }
+ 
+    private void eventCreateGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void eventCreatePost(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		HttpSession session = request.getSession();
+		int user_id = (int) session.getAttribute("id");
+        String name  = request.getParameter("event_name");
+        int price = Integer.parseInt(request.getParameter("event_price"));
+        String place = request.getParameter("event_place");
+        String desc = request.getParameter("event_description");
+        SimpleDateFormat startD = new SimpleDateFormat("MMMM, dd yyyy hh:mm a");
+        SimpleDateFormat endD = new SimpleDateFormat("MMMM, dd yyyy hh:mm a");
+        Timestamp start;
+        Timestamp end;
+		try {
+			start = new Timestamp(startD.parse(request.getParameter("event_start")).getTime());
+			end = new Timestamp(endD.parse(request.getParameter("event_end")).getTime());
+	        
+	        Event newEvent = new Event(user_id, name, price, place, desc, start, end);
+	        Event complete = eventDAO.insertEvent(newEvent);
+	        response.sendRedirect("detail?id=" + complete.getEvent_id());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+ 
+    private void eventEditGet(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Event existingEvent = eventDAO.getEvent(id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
+        request.setAttribute("event", existingEvent);
+        dispatcher.forward(request, response);
+    }
+    
+    private void eventEditPost(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		HttpSession session = request.getSession();
+		int event_id = Integer.parseInt(request.getParameter("id"));
+		int user_id = (int) session.getAttribute("id");
+        String name  = request.getParameter("event_name");
+        int price = Integer.parseInt(request.getParameter("event_price"));
+        String place = request.getParameter("event_place");
+        String desc = request.getParameter("event_description");
+        SimpleDateFormat startD = new SimpleDateFormat("MMMM, dd yyyy hh:mm a");
+        SimpleDateFormat endD = new SimpleDateFormat("MMMM, dd yyyy hh:mm a");
+        Timestamp start;
+        Timestamp end;
+		try {
+			start = new Timestamp(startD.parse(request.getParameter("event_start")).getTime());
+			end = new Timestamp(endD.parse(request.getParameter("event_end")).getTime());
+	        
+	        Event newEvent = new Event(event_id, user_id, name, price, place, desc, start, end);
+	        eventDAO.updateEvent(newEvent);
+	        response.sendRedirect("detail?id=" + newEvent.getEvent_id());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
+ 
+    private void eventDelete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+ 
+        Event event = new Event(id);
+        eventDAO.deleteEvent(event);
+        response.sendRedirect("profile");
+    }
 }

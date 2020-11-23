@@ -5,14 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import co.events.helper.Crypto;
 import co.events.model.Event;
-import co.events.model.User;
 
 public class EventDAO {
 	
@@ -56,15 +55,16 @@ public class EventDAO {
         ResultSet resultSet = statement.executeQuery(sql);
          
         while (resultSet.next()) {
+        	int event_id = resultSet.getInt("event_id");
             int user_id = resultSet.getInt("user_id");
             String name = resultSet.getString("event_name");
             int price = resultSet.getInt("event_price");
             String place = resultSet.getString("event_place");
             String desc = resultSet.getString("event_description");
-            Timestamp start = resultSet.getTimestamp("event_start_time");
-            Timestamp end = resultSet.getTimestamp("event_end_time");
+            Date start = new Date(resultSet.getTimestamp("event_start_time").getTime());
+            Date end = new Date(resultSet.getTimestamp("event_end_time").getTime());
             
-            Event event = new Event(user_id, name, price, place, desc, start, end);
+            Event event = new Event(event_id, user_id, name, price, place, desc, start, end);
             listEvent.add(event);
         }
          
@@ -76,23 +76,32 @@ public class EventDAO {
         return listEvent;
     }
 	
-    public boolean insertEvent(Event event) throws SQLException {
+    public Event insertEvent(Event event) throws SQLException {
+    	Event o = null;
         String sql = "INSERT INTO events (user_id, event_name, event_price, event_place, event_description, event_start_time, event_end_time) VALUES (?, ?, ?, ?, ?, ?, ?)";
         connect();
          
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, event.getUser_id());
         statement.setString(2, event.getName());
         statement.setInt(3, event.getPrice());
         statement.setString(4, event.getPlace());
         statement.setString(5, event.getDescription());
-        statement.setTimestamp(6, event.getStart_time());
-        statement.setTimestamp(7, event.getEnd_time());
+        statement.setTimestamp(6, new Timestamp(event.getStart_time().getTime()));
+        statement.setTimestamp(7, new Timestamp(event.getEnd_time().getTime()));
          
-        boolean rowInserted = statement.executeUpdate() > 0;
+        statement.executeUpdate();
+    	ResultSet res = statement.getGeneratedKeys();
+        
+        if (res.next()) {
+        	o = event;
+        	o.setEvent_id(res.getInt(1));
+        }
+
         statement.close();
         disconnect();
-        return rowInserted;
+        
+        return o;
     }
 	
     public boolean deleteEvent(Event event) throws SQLException {
@@ -109,9 +118,9 @@ public class EventDAO {
         return rowDeleted;     
     }
     
-    public boolean updateEvent(Event event) throws SQLException {
-        String sql = "UPDATE events SET user_id = ?, event_name = ?, event_price = ?, event_place = ?, event_description = ?, event_start_time = ?, event_end_time = ?";
-        sql += " WHERE event_id = ?";
+    public Event updateEvent(Event event) throws SQLException {
+    	Event o = null;
+        String sql = "UPDATE events SET user_id = ?, event_name = ?, event_price = ?, event_place = ?, event_description = ?, event_start_time = ?, event_end_time = ? WHERE event_id = ?";
         connect();
          
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
@@ -120,14 +129,18 @@ public class EventDAO {
         statement.setInt(3, event.getPrice());
         statement.setString(4, event.getPlace());
         statement.setString(5, event.getDescription());
-        statement.setTimestamp(6, event.getStart_time());
-        statement.setTimestamp(7, event.getEnd_time());
+        statement.setTimestamp(6, new Timestamp(event.getStart_time().getTime()));
+        statement.setTimestamp(7, new Timestamp(event.getEnd_time().getTime()));
         statement.setInt(8, event.getEvent_id());
          
-        boolean rowUpdated = statement.executeUpdate() > 0;
+        statement.executeUpdate();
+        
+        o = event;
+        o.setEvent_id(event.getEvent_id());
         statement.close();
         disconnect();
-        return rowUpdated;     
+        
+        return o;  
     }
      
     public Event getEvent(int id) throws SQLException {
@@ -147,8 +160,8 @@ public class EventDAO {
             int price = resultSet.getInt("event_price");
             String place = resultSet.getString("event_place");
             String desc = resultSet.getString("event_description");
-            Timestamp start = resultSet.getTimestamp("event_start_time");
-            Timestamp end = resultSet.getTimestamp("event_end_time");
+            Date start = new Date(resultSet.getTimestamp("event_start_time").getTime());
+            Date end = new Date(resultSet.getTimestamp("event_end_time").getTime());
              
             event = new Event(user_id, name, price, place, desc, start, end);
         }

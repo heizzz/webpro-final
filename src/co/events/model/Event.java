@@ -1,6 +1,6 @@
 package co.events.model;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class Event implements Serializable {
 	
@@ -13,11 +13,20 @@ public class Event implements Serializable {
 	private int price;
 	private String place;
 	private String description;
-	private Timestamp start_time;
-	private Timestamp end_time;
+	private Date start_time;
+	private Date end_time;
 	
-	public Event(int user_id, String name, int price, String place, String description, Timestamp start_time,Timestamp end_time) {
-		super();
+	public Event(int user_id, String name, int price, String place, String description, Date start_time, Date end_time) {
+		this.user_id = user_id;
+		this.name = name;
+		this.price = price;
+		this.place = place;
+		this.description = description;
+		this.start_time = start_time;
+		this.end_time = end_time;
+	}
+	public Event(int event_id, int user_id, String name, int price, String place, String description, Date start_time, Date end_time) {
+		this.event_id = event_id;
 		this.user_id = user_id;
 		this.name = name;
 		this.price = price;
@@ -66,16 +75,16 @@ public class Event implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Timestamp getStart_time() {
+	public Date getStart_time() {
 		return start_time;
 	}
-	public void setStart_time(Timestamp start_time) {
+	public void setStart_time(Date start_time) {
 		this.start_time = start_time;
 	}
-	public Timestamp getEnd_time() {
+	public Date getEnd_time() {
 		return end_time;
 	}
-	public void setEnd_time(Timestamp end_time) {
+	public void setEnd_time(Date end_time) {
 		this.end_time = end_time;
 	}
 	
