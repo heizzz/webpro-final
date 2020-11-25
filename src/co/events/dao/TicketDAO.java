@@ -5,7 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 
+import co.events.model.Event;
+import co.events.model.Ticket;
 import co.events.model.User;
 
 public class TicketDAO {
@@ -57,4 +61,29 @@ public class TicketDAO {
 		disconnect();
 		return out;
 	}
+	
+	public Ticket insertTicket(Ticket ticket) throws SQLException {
+    	Ticket o = null;
+        String sql = "INSERT INTO tickets (user_id, event_id, ticket_used, ticket_purchase_time) VALUES (?, ?, ?, ?)";
+        connect();
+         
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        statement.setInt(1, ticket.getUser_id());
+        statement.setInt(2, ticket.getEvent_id());
+        statement.setBoolean(3, ticket.getUsed());
+        statement.setTimestamp(4, ticket.getPurchase_time());
+         
+        statement.executeUpdate();
+    	ResultSet res = statement.getGeneratedKeys();
+        
+        if (res.next()) {
+        	o = ticket;
+        	o.setTicket_id(res.getInt(1));
+        }
+
+        statement.close();
+        disconnect();
+        
+        return o;
+    }
 }

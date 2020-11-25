@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import co.events.dao.EventDAO;
+import co.events.dao.TicketDAO;
 import co.events.dao.UserDAO;
 import co.events.model.Event;
+import co.events.model.Ticket;
 import co.events.model.User;
 
 public class Servlet extends HttpServlet {
@@ -25,6 +27,7 @@ public class Servlet extends HttpServlet {
 	
 	private UserDAO userDAO;
 	private EventDAO eventDAO;
+	private TicketDAO ticketDAO;
 	
 	@Override
 	public void init() {
@@ -34,6 +37,7 @@ public class Servlet extends HttpServlet {
 		
 		userDAO = new UserDAO(jdbcURL, jdbcUsername, jdbcPassword);
 		eventDAO = new EventDAO(jdbcURL, jdbcUsername, jdbcPassword);
+		ticketDAO = new TicketDAO(jdbcURL, jdbcUsername, jdbcPassword);
 	}
 	
 	@Override
@@ -70,6 +74,8 @@ public class Servlet extends HttpServlet {
 	        	break;
 	        case "/profile":
 	        	myProfile(request, response);
+	        case "/buy":
+	        	ticketBuy(request, response);
 	        	break;
 			}
 		} catch (SQLException ex) {
@@ -260,4 +266,24 @@ public class Servlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
         dispatcher.forward(request, response);
     }
+    private void ticketBuy(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		HttpSession session = request.getSession();
+		int user_id = (int) session.getAttribute("id");
+		int event_id = Integer.parseInt(request.getParameter("id"));
+		boolean ticket_used = false;
+		Timestamp ticket_purchased_time = new Timestamp(System.currentTimeMillis());
+		
+		System.out.println(user_id);
+		System.out.println(event_id);
+		
+//		try {
+	        Ticket newTicket = new Ticket(user_id, event_id, ticket_used, ticket_purchased_time);
+	        Ticket complete = ticketDAO.insertTicket(newTicket);
+			response.sendRedirect("dashboard");
+//	        response.sendRedirect("buy?id=" + complete.getEvent_id());
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+    }
+ 
 }
