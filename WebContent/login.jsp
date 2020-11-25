@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +25,14 @@
 			</ul>
 		</div>
 	</nav>
+	<c:if test="${success}">
+		<div style="right: 0;" class="position-absolute float-right w-25 m-3 alert alert-success alert-dismissible fade show" role="alert">
+			Register successful! Please log in.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    		<span aria-hidden="true">&times;</span>
+	 		</button>
+		</div>
+	</c:if>
 	<div class="p-5 w-75 mx-auto">
 		<h1 class="display-4 pb-2">Log into your account</h1>
 		<hr class="display-4 pb-4">
