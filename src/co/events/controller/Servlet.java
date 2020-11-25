@@ -129,6 +129,8 @@ public class Servlet extends HttpServlet {
 		
 		User newUser = new User(name, email, password);
 		userDAO.register(newUser);
+		HttpSession session = request.getSession();
+		session.setAttribute("registerSuccess", true);
 		response.sendRedirect("login");
 	}
 	
@@ -137,6 +139,10 @@ public class Servlet extends HttpServlet {
 		if (session.getAttribute("name") != null) {
 			response.sendRedirect("dashboard");
 			return;
+		}
+		if (session.getAttribute("registerSuccess") != null) {
+			request.setAttribute("success", (boolean)session.getAttribute("registerSuccess"));
+			session.setAttribute("registerSuccess", false);
 		}
 		RequestDispatcher dispatch = request.getRequestDispatcher("login.jsp");
 		dispatch.forward(request, response);
@@ -197,6 +203,7 @@ public class Servlet extends HttpServlet {
 	        
 	        Event newEvent = new Event(user_id, name, price, place, desc, start, end);
 	        Event complete = eventDAO.insertEvent(newEvent);
+	        session.setAttribute("createSuccess", true);
 	        response.sendRedirect("detail?id=" + complete.getEvent_id());
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -231,6 +238,7 @@ public class Servlet extends HttpServlet {
 	        
 	        Event newEvent = new Event(event_id, user_id, name, price, place, desc, start, end);
 	        eventDAO.updateEvent(newEvent);
+	        session.setAttribute("editSuccess", true);
 	        response.sendRedirect("detail?id=" + newEvent.getEvent_id());
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -238,17 +246,24 @@ public class Servlet extends HttpServlet {
     }
  
     private void eventDelete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		HttpSession session = request.getSession();
         int id = Integer.parseInt(request.getParameter("id"));
  
         Event event = new Event(id);
         eventDAO.deleteEvent(event);
+        session.setAttribute("deleteSuccess", true);
         response.sendRedirect("profile");
     }
 
 	private void eventDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, SQLException, IOException {
+		HttpSession session = request.getSession();
 		Event event = eventDAO.getEvent(Integer.parseInt(request.getParameter("id")));
 		RequestDispatcher dispatcher = request.getRequestDispatcher("detail.jsp");
         request.setAttribute("event", event);
+        if (session.getAttribute("createSuccess") != null) request.setAttribute("createSuccess", session.getAttribute("createSuccess"));
+        if (session.getAttribute("editSuccess") != null) request.setAttribute("editSuccess", session.getAttribute("editSuccess"));
+        session.setAttribute("createSuccess", false);
+        session.setAttribute("editSuccess", false);
         dispatcher.forward(request, response);
 	}
 	

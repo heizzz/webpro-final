@@ -28,18 +28,21 @@
 		<h1 class="display-4 pb-2">Register a new account</h1>
 		<hr class="display-4 pb-4">
 		<div class="px-5">
-			<form action="register" method="post">
+			<form class="needs-validation" action="register" method="post">
 				<div class="form-group">
 					<label for="email">Email address</label>
-					<input class="form-control" type="email" name="email" />
+					<input class="form-control" type="email" name="email" required/>
+					<div class="invalid-feedback">
+          				Please set an email address.
+        			</div>
 				</div>
 				<div class="form-group">
 					<label for="email">Password</label>
-					<input class="form-control" type="password" name="password" />
+					<input class="form-control" type="password" name="password" required/>
 				</div>
 				<div class="form-group">
 					<label for="email">Full Name</label>
-					<input class="form-control" type="text" name="name" />
+					<input class="form-control" type="text" name="name" required/>
 	    			<small class="form-text text-muted">Your name will be publicly visible.</small>
 				</div>
 				<div class="text-right">
