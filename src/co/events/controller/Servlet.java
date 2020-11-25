@@ -72,6 +72,8 @@ public class Servlet extends HttpServlet {
 	        case "/detail":
 	        	eventDetail(request, response);
 	        	break;
+	        case "/profile":
+	        	myProfile(request, response);
 	        case "/buy":
 	        	ticketBuy(request, response);
 	        	break;
@@ -155,6 +157,7 @@ public class Servlet extends HttpServlet {
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("name", user.getName());
+			session.setAttribute("email", user.getEmail());
 			session.setAttribute("id", user.getUser_id());
 			response.sendRedirect("dashboard");
 		} else {
@@ -264,6 +267,20 @@ public class Servlet extends HttpServlet {
         dispatcher.forward(request, response);
 	}
 	
+	private void myProfile(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        HttpSession session = request.getSession();
+		int id = (int) session.getAttribute("id");
+        request.setAttribute("id", id);
+        String name = (String) session.getAttribute("name");
+        request.setAttribute("name", name);
+        String email = (String) session.getAttribute("email");
+        request.setAttribute("email", email);
+        List<Event> listEvent = eventDAO.myEvents(id);
+        request.setAttribute("listEvent", listEvent);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
+        dispatcher.forward(request, response);
+    }
     private void ticketBuy(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 		HttpSession session = request.getSession();
 		int user_id = (int) session.getAttribute("id");
