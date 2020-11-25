@@ -172,4 +172,39 @@ public class EventDAO {
         return event;
     }
     
+    public List<Event> myEvents(int id) throws SQLException {
+        List<Event> listEvent = new ArrayList<>();
+         
+        String sql = "SELECT * FROM events WHERE user_id = ?";
+         
+        connect();
+         
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, id);
+        
+        ResultSet resultSet = statement.executeQuery();
+         
+        while (resultSet.next()) {
+        	int event_id = resultSet.getInt("event_id");
+            int user_id = resultSet.getInt("user_id");
+            String name = resultSet.getString("event_name");
+            int price = resultSet.getInt("event_price");
+            String place = resultSet.getString("event_place");
+            String desc = resultSet.getString("event_description");
+            Date start = new Date(resultSet.getTimestamp("event_start_time").getTime());
+            Date end = new Date(resultSet.getTimestamp("event_end_time").getTime());
+            
+            Event event = new Event(event_id, user_id, name, price, place, desc, start, end);
+            listEvent.add(event);
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        disconnect();
+         
+        return listEvent;
+    }
+    
+    
 }
