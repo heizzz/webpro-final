@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +37,13 @@
 				<h1 class="display-2">events.co</h1>
 				<p class="lead">Your one stop shop for online events!</p>
 				<hr class="my-4">
-				<p class="text-right">You are not logged in.</p>
+				<p class="text-right">
+					<% if (session.getAttribute("name") == null) { %>
+						You are not logged in.
+					<% } else { %>
+						Welcome, <c:out value="${name}"/>!
+					<% } %>
+				</p>
 			</div>
 		</div>
 	</div>

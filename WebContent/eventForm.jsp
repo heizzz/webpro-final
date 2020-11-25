@@ -6,7 +6,14 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>
+	<c:if test="${event != null}">
+		Edit Event - events.co
+	</c:if>
+	<c:if test="${event == null}">
+		Create Event - events.co
+	</c:if>
+</title>
 <%@ include file="lib.jspf"%>
 </head>
 <body>
@@ -22,7 +29,10 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link nav-active" href="#">Dashboard</a></li>
+				<li class="nav-item"><a class="nav-link nav-active" href="dashboard">Dashboard</a></li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -83,7 +93,7 @@
                             <div>
                                 <div class="form-group">
 									<label for="event_description">Event Description</label>
-                                    <textarea class="form-control" name="event_description" rows="5" placeholder="Event Description"></textarea>
+                                    <textarea class="form-control" name="event_description" rows="5" placeholder="Event Description"><c:if test="${event != null}"><c:out value="${event.description}" /></c:if></textarea>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 text-right pr-0">

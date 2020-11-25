@@ -65,6 +65,9 @@ public class Servlet extends HttpServlet {
 	        case "/delete":
 	            eventDelete(request, response);
 	            break;
+	        case "/detail":
+	        	eventDetail(request, response);
+	        	break;
 			}
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
@@ -192,6 +195,8 @@ public class Servlet extends HttpServlet {
         Event existingEvent = eventDAO.getEvent(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
         request.setAttribute("event", existingEvent);
+        HttpSession session = request.getSession();
+        request.setAttribute("name", session.getAttribute("name"));
         dispatcher.forward(request, response);
     }
     
@@ -226,4 +231,11 @@ public class Servlet extends HttpServlet {
         eventDAO.deleteEvent(event);
         response.sendRedirect("profile");
     }
+
+	private void eventDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, SQLException, IOException {
+		Event event = eventDAO.getEvent(Integer.parseInt(request.getParameter("id")));
+		RequestDispatcher dispatcher = request.getRequestDispatcher("detail.jsp");
+        request.setAttribute("event", event);
+        dispatcher.forward(request, response);
+	}
 }

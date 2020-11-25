@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Dashboard - events.co</title>
 <%@ include file="lib.jspf"%>
 </head>
 <body>
@@ -23,6 +23,9 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav">
 				<li class="nav-item"><a class="nav-link nav-active" href="#">Dashboard</a></li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
 			</ul>
 		</div>
 	</nav>
