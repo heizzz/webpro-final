@@ -262,6 +262,8 @@ public class Servlet extends HttpServlet {
         request.setAttribute("email", email);
         List<Event> listEvent = eventDAO.myEvents(id);
         request.setAttribute("listEvent", listEvent);
+        List<Ticket> listTicket = ticketDAO.myTickets(id);
+        request.setAttribute("listTicket", listTicket);
         
         RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
         dispatcher.forward(request, response);
