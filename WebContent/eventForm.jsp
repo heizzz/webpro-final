@@ -60,13 +60,13 @@
                             <div>
                                 <div class="form-group">
 									<label for="event_name">Event Name</label>
-                                    <input type="text" name="event_name" class="form-control" placeholder="Event Name" value="<c:if test="${event != null}"><c:out value="${event.name}" /></c:if>">
+                                    <input type="text" name="event_name" class="form-control" placeholder="Event Name" value="<c:if test="${event != null}"><c:out value="${event.name}" /></c:if>" required>
                                 </div>
                             </div>
                             <div>
                                 <div class="form-group">
 									<label for="event_place">Event Place</label>
-                                    <input type="text" name="event_place" class="form-control" placeholder="Event Place" value="<c:if test="${event != null}"><c:out value="${event.place}" /></c:if>">
+                                    <input type="text" name="event_place" class="form-control" placeholder="Event Place" value="<c:if test="${event != null}"><c:out value="${event.place}" /></c:if>" required>
                                 </div>
                             </div>
                             <div>
@@ -76,18 +76,18 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="event-price">IDR</span>
                                         </div>
-                                        <input type="number" name="event_price" class="form-control" placeholder="Event Price"  value="<c:if test="${event != null}"><c:out value="${event.price}" /></c:if>">
+                                        <input type="number" name="event_price" class="form-control" placeholder="Event Price"  value="<c:if test="${event != null}"><c:out value="${event.price}" /></c:if>" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex flex-row justify-content-between">
                                 <div class="form-group w-50">
 									<label for="event_start">Event Start</label>
-                                    <input type="text" id="startdate" name="event_start" class="form-control" placeholder="Event Start" data-input>
+                                    <input style="background-color: #fff !important;" type="text" id="startdate" name="event_start" class="form-control" placeholder="Event Start" data-input required>
                                 </div>
                                 <div class="form-group w-50 ml-4">
 									<label for="event_end">Event End</label>
-                                    <input type="text" id="enddate" name="event_end" class="form-control" placeholder="Event End" data-input>
+                                    <input style="background-color: #fff !important;" type="text" id="enddate" name="event_end" class="form-control" placeholder="Event End" data-input required>
                                 </div>
                             </div>
                             <div>
@@ -112,14 +112,26 @@
 <%@ include file="libjs.jspf"%>
 <script type="text/javascript">
 	$("#startdate").flatpickr({
+		allowInput: true,
+		altInput: true,
+	    altFormat: "F, d Y G:i K",
 		mode: "single",
 	    dateFormat: "F, d Y G:i K",
-	    defaultDate: "${startdate}" == "" ? null : new Date("${startdate}")
+	    defaultDate: "${startdate}" == "" ? null : new Date("${startdate}"),
+	    onClose: function (selectedDates, dateStr, instance) {
+	    	instance.setDate(selectedDates);
+	    }
 	});
 	$("#enddate").flatpickr({
+		allowInput: true,
+		altInput: true,
+	    altFormat: "F, d Y G:i K",
 		enableTime: true,
 	    dateFormat: "F, d Y G:i K",
-	    defaultDate: "${enddate}" == "" ? null : new Date("${enddate}")
+	    defaultDate: "${enddate}" == "" ? null : new Date("${enddate}"),
+ 	    onClose: function (selectedDates, dateStr, instance) {
+	     	instance.setDate(selectedDates);
+		}
 	});
 </script>
 </body>

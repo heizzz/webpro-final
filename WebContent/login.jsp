@@ -40,11 +40,11 @@
 			<form action="login" method="post">
 				<div class="form-group">
 					<label for="email">Email address</label>
-					<input class="form-control" type="email" name="email" />
+					<input class="form-control" type="email" name="email" required/>
 				</div>
 				<div class="form-group">
 					<label for="email">Password</label>
-					<input class="form-control" type="password" name="password" />
+					<input class="form-control" type="password" name="password" required/>
 				</div>
 				<div class="text-right">
 					<span>Don't have an account? <a href="register">Register</a>.</span>
