@@ -62,6 +62,9 @@
 							<span class="pl-3"><c:out value="${event.description}" /></span>
 						</c:if>
                 	</div>
+                	<div class="col-xs-12 col-sm-12 col-md-12 text-right pr-0">
+					    <a class="btn btn-danger px-4" href="dashboard">Back</a>
+					 </div>
                 </div>
             </div>
         </div>

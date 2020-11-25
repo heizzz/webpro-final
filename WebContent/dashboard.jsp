@@ -72,8 +72,15 @@
 				                    <td><fmt:formatDate value="${event.end_time}" type="both" dateStyle="long" timeStyle="medium"/></td>
 				                    <td><fmt:formatNumber value="${event.price}" pattern="IDR #,###"/></td>
 				                    <td>
-				                        <a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
-				                        <a class="pl-3" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>                     
+										<c:choose>
+					                    	<c:when test="${id == event.user_id}">
+						                        <a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
+						                        <a class="pl-3" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
+											</c:when>
+											<c:otherwise>
+						                        <a href="buy?id=<c:out value="${event.event_id}" />">Buy Ticket</a>
+						                    </c:otherwise>
+										</c:choose>
 				                    </td>
 				                </tr>
 				            </c:forEach>

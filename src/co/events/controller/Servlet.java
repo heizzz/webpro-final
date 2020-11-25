@@ -157,7 +157,10 @@ public class Servlet extends HttpServlet {
 	
     private void dashboard(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
         List<Event> listEvent = eventDAO.allEvents();
+        HttpSession session = request.getSession();
+		int id = (int) session.getAttribute("id");
         request.setAttribute("listEvent", listEvent);
+        request.setAttribute("id", id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("dashboard.jsp");
         dispatcher.forward(request, response);
     }
