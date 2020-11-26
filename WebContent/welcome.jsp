@@ -9,8 +9,7 @@
 <%@ include file="lib.jspf"%>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark"
-		style="background-color: #2980b9">
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);">
 		<a class="navbar-brand" href="#">events.co</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"

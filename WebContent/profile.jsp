@@ -10,8 +10,7 @@
 <%@ include file="lib.jspf"%>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark"
-		style="background-color: #2980b9">
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);">
 		<a class="navbar-brand" href=".">events.co</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -30,56 +29,6 @@
 			</ul>
 		</div>
 	</nav>
-<<<<<<< HEAD
-
-	<div class="container mt-5">
-		<div class="row justify-content-center">
-			<div class="col-md">
-				<div class="card my-2">
-					<div class="card-header"
-						style="text-align: center; font-size: 20px;">My Profile</div>
-					<div class="card-body">
-						<h1>${name}</h1>
-						<p>
-							<b>Email address: </b>${email}</p>
-					</div>
-				</div>
-
-				<div class="card my-2">
-					<div class="card-header"
-						style="text-align: center; font-size: 20px;">My Events</div>
-					<div class="card-body">
-						<table class="table table-bordered table-responsive-lg"
-							style="text-align: center;">
-							<thead class="table-info">
-								<tr>
-									<th>Event Name</th>
-									<th>Event Place</th>
-									<th>Event Start</th>
-									<th>Event End</th>
-									<th>Price</th>
-									<th colspan=3>Action</th>
-								</tr>
-							</thead>
-
-							<tbody>
-								<c:forEach var="event" items="${listEvent}">
-									<tr>
-										<td><a
-											href="detail?id=<c:out value="${event.event_id}" />"><c:out
-													value="${event.name}" /></a></td>
-										<td><c:out value="${event.place}" /></td>
-										<td><fmt:formatDate value="${event.start_time}"
-												type="both" dateStyle="long" timeStyle="medium" /></td>
-										<td><fmt:formatDate value="${event.end_time}" type="both"
-												dateStyle="long" timeStyle="medium" /></td>
-										<td><fmt:formatNumber value="${event.price}"
-												pattern="IDR #,###" /></td>
-										<td><a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
-											<a class="pl-3"
-											href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
-
-=======
 	<div class="container mt-5">
 		<div class="row justify-content-center">
 			<div class="col-md-12">
@@ -121,7 +70,6 @@
 										<td>
 											<a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
 											<a class="pl-3" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
->>>>>>> e180db52593eb2941b8d841a427070f735ccd846
 										</td>
 									</tr>
 								</c:forEach>
@@ -134,11 +82,6 @@
 					<div class="card-header"
 						style="text-align: center; font-size: 20px;">My Tickets</div>
 					<div class="card-body">
-<<<<<<< HEAD
-						<table class="table table-bordered table-responsive-lg"
-							style="text-align: center;">
-							<thead class="table-info">
-=======
 						<table class="table table-bordered table-responsive-lg" style="text-align: center;">
 							<thead class="table-info">
 								<tr>
@@ -178,7 +121,6 @@
 									</tr>
 								</c:forEach>
 							</tbody>
->>>>>>> e180db52593eb2941b8d841a427070f735ccd846
 						</table>
 					</div>
 				</div>
