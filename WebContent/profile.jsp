@@ -62,10 +62,11 @@
 										<td><fmt:formatDate value="${event.start_time}" type="both" dateStyle="long" timeStyle="medium" /></td>
 										<td><fmt:formatDate value="${event.end_time}" type="both" dateStyle="long" timeStyle="medium" /></td>
 										<td><fmt:formatNumber value="${event.price}" pattern="IDR #,###" /></td>
-										<td>
-											<a class="btn btn-primary" href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
+										<td class="d-flex flex-row">
+											<a class="btn btn-primary mr-1" href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
 											<a class="btn btn-danger" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
 										</td>
+										
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -92,7 +93,7 @@
 										<td><fmt:formatDate value="${ticket.getEvent_time()}" type="both" dateStyle="long" timeStyle="medium" /></td>
 										
 										<c:choose>
-					                    	<c:when test="${ticket.isUsed()}">
+					                    	<c:when test="${ticket.used==true}">	
 					                    		<td valign="middle">
 						                            <svg width="20px" height="20px" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
 						                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />

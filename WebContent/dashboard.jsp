@@ -88,8 +88,10 @@
 				                    <td>
 										<c:choose>
 					                    	<c:when test="${id == event.user_id}">
-						                        <a class="btn btn-primary" href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
+					                    	<div class="d-flex flex-row">
+						                        <a class="btn btn-primary mr-1" href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
 						                        <a class="btn btn-danger" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
+						                    </div>
 											</c:when>
 											<c:otherwise>
 						                        <a class="btn btn-warning" href="buy?id=<c:out value="${event.event_id}" />">Buy Ticket</a>

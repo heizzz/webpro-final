@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import co.events.model.Event;
 import co.events.model.Ticket;
 
 public class TicketDAO {
@@ -87,9 +86,10 @@ public class TicketDAO {
             Date start = new Date(resultSet.getTimestamp("event_start_time").getTime());
             Date purchase = new Date(resultSet.getTimestamp("ticket_purchase_time").getTime());
             int ticket_id = resultSet.getInt("ticket_id");
+            Boolean used = resultSet.getBoolean("ticket_used");
             
             
-            Ticket ticket = new Ticket(ticket_id, name, purchase, start);
+            Ticket ticket = new Ticket(ticket_id, name, purchase, start, used);
 //            System.out.println(name + purchase.toString());
             listTicket.add(ticket);
         }

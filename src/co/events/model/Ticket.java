@@ -24,10 +24,10 @@ public class Ticket implements Serializable{
 		}
 	}
 	
-	public Ticket(int ticket_id, String event_name, Date purchase, Date event_time) {
+	public Ticket(int ticket_id, String event_name, Date purchase, Date event_time, Boolean used) {
 		this.ticket_id = ticket_id;
 		this.purchase_time = purchase;
-		this.used = false;
+		this.used = used;
 		this.detail = new Detail(event_name, event_time);
 	}
 	public Ticket(int user_id, int event_id, Boolean used, Timestamp purchase_time) {
