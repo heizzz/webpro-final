@@ -24,7 +24,7 @@
 				<li class="nav-item"><a class="nav-link nav-active" href="dashboard">Dashboard</a></li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="logout">Logout</a></li>
 			</ul>
 		</div>
 	</nav>

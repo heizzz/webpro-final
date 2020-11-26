@@ -74,6 +74,7 @@ public class Servlet extends HttpServlet {
 	        	break;
 	        case "/profile":
 	        	myProfile(request, response);
+	        	break;
 	        case "/buy":
 	        	ticketBuy(request, response);
 	        	break;
@@ -174,6 +175,10 @@ public class Servlet extends HttpServlet {
     private void dashboard(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
         List<Event> listEvent = eventDAO.allEvents();
         HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
 		int id = (int) session.getAttribute("id");
         request.setAttribute("listEvent", listEvent);
         request.setAttribute("id", id);
@@ -182,6 +187,11 @@ public class Servlet extends HttpServlet {
     }
  
     private void eventCreateGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
         RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
         dispatcher.forward(request, response);
     }
@@ -211,11 +221,15 @@ public class Servlet extends HttpServlet {
     }
  
     private void eventEditGet(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
         int id = Integer.parseInt(request.getParameter("id"));
         Event existingEvent = eventDAO.getEvent(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("eventForm.jsp");
         request.setAttribute("event", existingEvent);
-        HttpSession session = request.getSession();
         request.setAttribute("name", session.getAttribute("name"));
         dispatcher.forward(request, response);
     }
@@ -246,7 +260,11 @@ public class Servlet extends HttpServlet {
     }
  
     private void eventDelete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
         int id = Integer.parseInt(request.getParameter("id"));
  
         Event event = new Event(id);
@@ -256,7 +274,11 @@ public class Servlet extends HttpServlet {
     }
 
 	private void eventDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, SQLException, IOException {
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
 		Event event = eventDAO.getEvent(Integer.parseInt(request.getParameter("id")));
 		RequestDispatcher dispatcher = request.getRequestDispatcher("detail.jsp");
         request.setAttribute("event", event);
@@ -269,6 +291,10 @@ public class Servlet extends HttpServlet {
 	
 	private void myProfile(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
         HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
 		int id = (int) session.getAttribute("id");
         request.setAttribute("id", id);
         String name = (String) session.getAttribute("name");
@@ -284,7 +310,11 @@ public class Servlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
     private void ticketBuy(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
 		int user_id = (int) session.getAttribute("id");
 		int event_id = Integer.parseInt(request.getParameter("id"));
 		boolean ticket_used = false;

@@ -21,11 +21,11 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav ml-auto">
 				<% if (session.getAttribute("name") == null) { %>
-				<li class="nav-item"><a class="nav-link" href="login">Login</a></li>
-				<li class="nav-item"><a class="nav-link" href="register">Register</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="login">Login</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="register">Register</a></li>
 				<% } else { %>
-				<li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
-				<li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="dashboard">Dashboard</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="logout">Logout</a></li>
 				<% } %>
 			</ul>
 		</div>
