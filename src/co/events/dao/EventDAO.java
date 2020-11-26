@@ -163,7 +163,7 @@ public class EventDAO {
             Date start = new Date(resultSet.getTimestamp("event_start_time").getTime());
             Date end = new Date(resultSet.getTimestamp("event_end_time").getTime());
              
-            event = new Event(user_id, name, price, place, desc, start, end);
+            event = new Event(id, user_id, name, price, place, desc, start, end);
         }
          
         resultSet.close();

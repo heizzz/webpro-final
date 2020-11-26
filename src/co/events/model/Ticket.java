@@ -37,6 +37,10 @@ public class Ticket implements Serializable{
 		this.used = used;
 		this.purchase_time = purchase_time;
 	}
+	public Ticket(int ticket_id, int event_id) {
+		this.ticket_id = ticket_id;
+		this.event_id = event_id;
+	}
 	
 	public int getTicket_id() {
 		return ticket_id;

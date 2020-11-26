@@ -78,8 +78,13 @@
 						</c:if>
                 	</div>
                 	<div class="col-xs-12 col-sm-12 col-md-12 text-right pr-0">
+						<c:choose>
+	                    	<c:when test="${id == event.user_id}">
+					    		<a class="btn btn-primary px-4" href="check?id=<c:out value="${event.event_id}" />">Check attendance</a>
+							</c:when>
+						</c:choose>
 					    <a class="btn btn-danger px-4" href="dashboard">Back</a>
-					 </div>
+					</div>
                 </div>
             </div>
         </div>
