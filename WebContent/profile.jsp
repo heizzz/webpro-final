@@ -30,6 +30,7 @@
 			</ul>
 		</div>
 	</nav>
+<<<<<<< HEAD
 
 	<div class="container mt-5">
 		<div class="row justify-content-center">
@@ -78,6 +79,49 @@
 											<a class="pl-3"
 											href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
 
+=======
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-12">
+				<div class="card my-2">
+					<div class="card-header"
+						style="text-align: center; font-size: 20px;">My Profile</div>
+					<div class="card-body">
+						<h1>${name}</h1>
+						<p>
+							<b>Email address: </b>${email}</p>
+					</div>
+				</div>
+
+				<div class="card my-2">
+					<div class="card-header"
+						style="text-align: center; font-size: 20px;">My Events</div>
+					<div class="card-body">
+						<table class="table table-bordered table-responsive-lg"
+							style="text-align: center;">
+							<thead class="table-info">
+								<tr>
+									<th>Event Name</th>
+									<th>Event Place</th>
+									<th>Event Start</th>
+									<th>Event End</th>
+									<th>Price</th>
+									<th colspan=3>Action</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<c:forEach var="event" items="${listEvent}">
+									<tr>
+										<td><a href="detail?id=<c:out value="${event.event_id}" />"><c:out value="${event.name}" /></a></td>
+										<td><c:out value="${event.place}" /></td>
+										<td><fmt:formatDate value="${event.start_time}" type="both" dateStyle="long" timeStyle="medium" /></td>
+										<td><fmt:formatDate value="${event.end_time}" type="both" dateStyle="long" timeStyle="medium" /></td>
+										<td><fmt:formatNumber value="${event.price}" pattern="IDR #,###" /></td>
+										<td>
+											<a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
+											<a class="pl-3" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
+>>>>>>> e180db52593eb2941b8d841a427070f735ccd846
 										</td>
 									</tr>
 								</c:forEach>
@@ -90,16 +134,57 @@
 					<div class="card-header"
 						style="text-align: center; font-size: 20px;">My Tickets</div>
 					<div class="card-body">
+<<<<<<< HEAD
 						<table class="table table-bordered table-responsive-lg"
 							style="text-align: center;">
 							<thead class="table-info">
+=======
+						<table class="table table-bordered table-responsive-lg" style="text-align: center;">
+							<thead class="table-info">
+								<tr>
+									<th>Code</th>
+									<th>Event Name</th>
+									<th>Purchase Time</th>
+									<th>Event Time</th>
+									<th>Used</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<c:forEach var="ticket" items="${listTicket}">
+									<tr>
+										<td><c:out value="${ticket.ticket_id}" /></td>
+										<td><c:out value="${ticket.getEvent_name()}" /></td>
+										<td><fmt:formatDate value="${ticket.purchase_time}" type="both" dateStyle="long" timeStyle="medium" /></td>
+										<td><fmt:formatDate value="${ticket.getEvent_time()}" type="both" dateStyle="long" timeStyle="medium" /></td>
+										
+										<c:choose>
+					                    	<c:when test="${ticket.isUsed()}">
+					                    		<td valign="middle">
+						                            <svg width="20px" height="20px" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="green" xmlns="http://www.w3.org/2000/svg">
+						                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+						                            </svg>
+						                        </td>
+											</c:when>
+											<c:otherwise>
+												<td valign="middle">
+						                            <svg width="20px" height="20px" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="red" xmlns="http://www.w3.org/2000/svg">
+						                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+						                            </svg>
+						                        </td>
+						                    </c:otherwise>
+										</c:choose>
+				                    
+									</tr>
+								</c:forEach>
+							</tbody>
+>>>>>>> e180db52593eb2941b8d841a427070f735ccd846
 						</table>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 	<%@ include file="libjs.jspf"%>
 </body>
 </html>

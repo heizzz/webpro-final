@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import co.events.model.Ticket;
-import co.events.model.User;
 
 public class TicketDAO {
 	
@@ -40,26 +43,6 @@ public class TicketDAO {
 		}
 	}
 	
-	public boolean myTickets(User user) throws SQLException {
-		boolean out = false;
-		String sql = "SELECT * FROM tickets WHERE user_email = ?";
-		connect();
-		
-		PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-		statement.setString(1, user.getEmail());
-		
-		ResultSet res = statement.executeQuery();
-		
-		if (res.next()) {
-//			if (Crypto.hash(user.getPassword()).equals(res.getString("user_password"))) out = true;
-		}
-		
-		res.close();
-		statement.close();
-		disconnect();
-		return out;
-	}
-	
 	public Ticket insertTicket(Ticket ticket) throws SQLException {
     	Ticket o = null;
         String sql = "INSERT INTO tickets (user_id, event_id, ticket_used, ticket_purchase_time) VALUES (?, ?, ?, ?)";
@@ -69,7 +52,8 @@ public class TicketDAO {
         statement.setInt(1, ticket.getUser_id());
         statement.setInt(2, ticket.getEvent_id());
         statement.setBoolean(3, ticket.getUsed());
-        statement.setTimestamp(4, ticket.getPurchase_time());
+//        statement.setTimestamp(4, ticket.getPurchase_time());
+        statement.setTimestamp(4, new Timestamp (ticket.getPurchase_time().getTime()));
          
         statement.executeUpdate();
     	ResultSet res = statement.getGeneratedKeys();
@@ -83,5 +67,37 @@ public class TicketDAO {
         disconnect();
         
         return o;
+    }
+	
+    public List<Ticket> myTickets(int id) throws SQLException {
+        List<Ticket> listTicket = new ArrayList<>();
+         
+        String sql = "SELECT * FROM events, tickets WHERE tickets.event_id = events.event_id AND tickets.user_id = ?";
+         
+        connect();
+         
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, id);
+        
+        ResultSet resultSet = statement.executeQuery();
+         
+        while (resultSet.next()) {
+            String name = resultSet.getString("event_name");
+            Date start = new Date(resultSet.getTimestamp("event_start_time").getTime());
+            Date purchase = new Date(resultSet.getTimestamp("ticket_purchase_time").getTime());
+            int ticket_id = resultSet.getInt("ticket_id");
+            
+            
+            Ticket ticket = new Ticket(ticket_id, name, purchase, start);
+//            System.out.println(name + purchase.toString());
+            listTicket.add(ticket);
+        }
+         
+        resultSet.close();
+        statement.close();
+         
+        disconnect();
+         
+        return listTicket;
     }
 }
