@@ -182,6 +182,8 @@ public class Servlet extends HttpServlet {
 		int id = (int) session.getAttribute("id");
         request.setAttribute("listEvent", listEvent);
         request.setAttribute("id", id);
+        if (session.getAttribute("buySuccess") != null) request.setAttribute("buySuccess", session.getAttribute("buySuccess"));
+        session.setAttribute("buySuccess", false);
         RequestDispatcher dispatcher = request.getRequestDispatcher("dashboard.jsp");
         dispatcher.forward(request, response);
     }
@@ -305,7 +307,9 @@ public class Servlet extends HttpServlet {
         request.setAttribute("listEvent", listEvent);
         List<Ticket> listTicket = ticketDAO.myTickets(id);
         request.setAttribute("listTicket", listTicket);
-        
+
+        if (session.getAttribute("deleteSuccess") != null) request.setAttribute("deleteSuccess", session.getAttribute("deleteSuccess"));
+        session.setAttribute("deleteSuccess", false);
         RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
         dispatcher.forward(request, response);
     }
@@ -320,12 +324,16 @@ public class Servlet extends HttpServlet {
 		boolean ticket_used = false;
 		Timestamp ticket_purchased_time = new Timestamp(System.currentTimeMillis());
 		
-		System.out.println(user_id);
-		System.out.println(event_id);
+//		request.setAttribute("buySuccess", session.getAttribute("buySuccess"));
+//		session.setAttribute("buySuccess", false);
+		
+//		System.out.println(user_id);
+//		System.out.println(event_id);
 		
 //		try {
 	        Ticket newTicket = new Ticket(user_id, event_id, ticket_used, ticket_purchased_time);
 	        Ticket complete = ticketDAO.insertTicket(newTicket);
+			session.setAttribute("buySuccess", true);
 			response.sendRedirect("dashboard");
 //	        response.sendRedirect("buy?id=" + complete.getEvent_id());
 //		} catch (ParseException e) {

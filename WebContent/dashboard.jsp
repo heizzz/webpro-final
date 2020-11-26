@@ -36,6 +36,14 @@
 	 		</button>
 		</div>
 	</c:if>
+	<c:if test="${buySuccess}">
+		<div style="right: 0;" class="position-absolute float-right w-25 m-3 alert alert-success alert-dismissible fade show" role="alert">
+			Successfully buy ticket.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    		<span aria-hidden="true">&times;</span>
+	 		</button>
+		</div>
+	</c:if>
 	<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
