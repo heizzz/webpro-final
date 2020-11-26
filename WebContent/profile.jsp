@@ -31,33 +31,28 @@
 	</nav>
 	<div class="container mt-5">
 		<div class="row justify-content-center">
-			<div class="col-md-12">
-				<div class="card my-2">
-					<div class="card-header"
-						style="text-align: center; font-size: 20px;">My Profile</div>
-					<div class="card-body">
-						<h1>${name}</h1>
-						<p>
-							<b>Email address: </b>${email}</p>
+			<div class="col-md">
+				<div class="mb-5">
+					<h1 class="display-4 pb-2">${name}</h1>
+					<p class="pb-5"><b>Email address: </b>${email}</p>
+				</div>
+				<div class="w-100 pb-3 d-flex flex-column align-items-center">
+					<div class="btn-group" role="group">
+						<button class="btn btn-secondary active px-5" id="btnEvents">My Events</button>
+						<button class="btn btn-secondary px-5" id="btnTickets">My Tickets</button>
 					</div>
 				</div>
-
-				<div class="card my-2">
-					<div class="card-header"
-						style="text-align: center; font-size: 20px;">My Events</div>
-					<div class="card-body">
-						<table class="table table-bordered table-responsive-lg"
-							style="text-align: center;">
-							<thead class="table-info">
-								<tr>
-									<th>Event Name</th>
-									<th>Event Place</th>
-									<th>Event Start</th>
-									<th>Event End</th>
-									<th>Price</th>
-									<th colspan=3>Action</th>
-								</tr>
-							</thead>
+                    <table class="table table-bordered table-responsive-lg text-center" id="events">
+                        <thead class="table-info text-light" style="background-color: #34495e;">
+                            <tr>
+                                <th style="border: none;">Event Name</th>
+                                <th style="border: none;">Event Place</th>
+                                <th style="border: none;">Event Start</th>
+                                <th style="border: none;">Event End</th>
+                                <th style="border: none;">Price</th>
+                                <th style="border: none;" colspan=3>Action</th>
+                            </tr>
+                        </thead>
 
 							<tbody>
 								<c:forEach var="event" items="${listEvent}">
@@ -77,19 +72,14 @@
 						</table>
 					</div>
 				</div>
-
-				<div class="card my-2">
-					<div class="card-header"
-						style="text-align: center; font-size: 20px;">My Tickets</div>
-					<div class="card-body">
-						<table class="table table-bordered table-responsive-lg" style="text-align: center;">
-							<thead class="table-info">
-								<tr>
-									<th>Code</th>
-									<th>Event Name</th>
-									<th>Purchase Time</th>
-									<th>Event Time</th>
-									<th>Used</th>
+                    <table class="table table-bordered table-responsive-lg text-center" id="tickets">
+                        <thead class="table-info text-light" style="background-color: #34495e;">
+                            <tr>
+									<th style="border: none;">Code</th>
+									<th style="border: none;">Event Name</th>
+									<th style="border: none;">Purchase Time</th>
+									<th style="border: none;">Event Time</th>
+									<th style="border: none;">Used</th>
 								</tr>
 							</thead>
 
@@ -122,11 +112,25 @@
 								</c:forEach>
 							</tbody>
 						</table>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 	<%@ include file="libjs.jspf"%>
+	<script>
+		$(document).ready(function() {
+			$("#tickets").hide();
+			$("#btnEvents").addClass("active");
+		});
+		$("#btnEvents").on("click", function() {
+			$("#events").show();
+			$("#tickets").hide();
+			$("#btnEvents").addClass("active");
+			$("#btnTickets").removeClass("active");
+		});
+		$("#btnTickets").on("click", function() {
+			$("#tickets").show();
+			$("#events").hide();
+			$("#btnTickets").addClass("active");
+			$("#btnEvents").removeClass("active");
+		});
+	</script>
 </body>
 </html>

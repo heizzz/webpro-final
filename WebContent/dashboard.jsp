@@ -58,15 +58,15 @@
             <div class="card my-2">
                 <div class="card-header" style="text-align:center;  font-size:20px;">All Events</div>
                 <div class="card-body">
-                    <table class="table table-bordered table-responsive-lg" style="text-align:center;">
-                        <thead class="table-info">
+                    <table class="table table-bordered table-responsive-lg text-center">
+                        <thead class="table-info text-light" style="background-color: #34495e;">
                             <tr>
-                                <th>Event Name</th>
-                                <th>Event Place</th>
-                                <th>Event Start</th>
-                                <th>Event End</th>
-                                <th>Price</th>
-                                <th colspan=3>Action</th>
+                                <th style="border: none;">Event Name</th>
+                                <th style="border: none;">Event Place</th>
+                                <th style="border: none;">Event Start</th>
+                                <th style="border: none;">Event End</th>
+                                <th style="border: none;">Price</th>
+                                <th style="border: none;" colspan=3>Action</th>
                             </tr>
                         </thead>
                         
