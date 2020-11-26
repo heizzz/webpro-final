@@ -6,9 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 
-import co.events.model.Event;
 import co.events.model.Ticket;
 import co.events.model.User;
 
