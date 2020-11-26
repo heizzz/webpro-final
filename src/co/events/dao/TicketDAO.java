@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import co.events.model.Event;
 import co.events.model.Ticket;
 
 public class TicketDAO {
@@ -99,5 +100,43 @@ public class TicketDAO {
         disconnect();
          
         return listTicket;
+    }
+    
+    public void updateTicket(Ticket ticket) throws SQLException {
+        String sql = "UPDATE tickets SET ticket_used = 1 WHERE ticket_id = ?";
+        connect();
+         
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+        statement.setInt(1, ticket.getTicket_id());
+         
+        statement.executeUpdate();
+        
+        statement.close();
+        disconnect();
+    }
+    
+    public int check(Ticket ticket) throws SQLException {
+        String sql = "SELECT * from tickets WHERE tickets.ticket_id = ?";
+        connect();
+         
+        PreparedStatement statement = jdbcConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        statement.setInt(1, ticket.getTicket_id());
+         
+    	ResultSet res = statement.executeQuery();
+        
+        if (res.next()) {
+        	int event_id = res.getInt("event_id");
+        	boolean used = res.getBoolean("ticket_used");
+        	
+
+            statement.close();
+            disconnect();
+        	
+        	if(used) return 3;
+        	if(event_id != ticket.getEvent_id()) return 2;
+        	updateTicket(ticket);
+        	return 1;
+        }
+        return 0;
     }
 }

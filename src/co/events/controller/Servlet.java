@@ -78,6 +78,9 @@ public class Servlet extends HttpServlet {
 	        case "/buy":
 	        	ticketBuy(request, response);
 	        	break;
+	        case "/check":
+	        	ticketCheckGet(request, response);
+	        	break;
 			}
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
@@ -101,6 +104,9 @@ public class Servlet extends HttpServlet {
 	            break;
 	        case "/edit":
 	            eventEditPost(request, response);
+	            break;
+	        case "/check":
+	            ticketCheckPost(request, response);
 	            break;
 			}
 		} catch (SQLException e) {
@@ -182,6 +188,8 @@ public class Servlet extends HttpServlet {
 		int id = (int) session.getAttribute("id");
         request.setAttribute("listEvent", listEvent);
         request.setAttribute("id", id);
+        if (session.getAttribute("buySuccess") != null) request.setAttribute("buySuccess", session.getAttribute("buySuccess"));
+        session.setAttribute("buySuccess", false);
         RequestDispatcher dispatcher = request.getRequestDispatcher("dashboard.jsp");
         dispatcher.forward(request, response);
     }
@@ -279,6 +287,8 @@ public class Servlet extends HttpServlet {
 			response.sendRedirect("login");
 			return;
 		}
+		int id = (int) session.getAttribute("id");
+        request.setAttribute("id", id);
 		Event event = eventDAO.getEvent(Integer.parseInt(request.getParameter("id")));
 		RequestDispatcher dispatcher = request.getRequestDispatcher("detail.jsp");
         request.setAttribute("event", event);
@@ -305,10 +315,13 @@ public class Servlet extends HttpServlet {
         request.setAttribute("listEvent", listEvent);
         List<Ticket> listTicket = ticketDAO.myTickets(id);
         request.setAttribute("listTicket", listTicket);
-        
+
+        if (session.getAttribute("deleteSuccess") != null) request.setAttribute("deleteSuccess", session.getAttribute("deleteSuccess"));
+        session.setAttribute("deleteSuccess", false);
         RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
         dispatcher.forward(request, response);
     }
+	
     private void ticketBuy(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         HttpSession session = request.getSession();
 		if (session.getAttribute("name") == null) {
@@ -320,17 +333,56 @@ public class Servlet extends HttpServlet {
 		boolean ticket_used = false;
 		Timestamp ticket_purchased_time = new Timestamp(System.currentTimeMillis());
 		
-		System.out.println(user_id);
+        Ticket newTicket = new Ticket(user_id, event_id, ticket_used, ticket_purchased_time);
+        Ticket complete = ticketDAO.insertTicket(newTicket);
+		session.setAttribute("buySuccess", true);
+		response.sendRedirect("dashboard");
+    }
+    
+    
+    private void ticketCheckGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        request.setAttribute("id", request.getParameter("id"));
+		if (session.getAttribute("name") == null) {
+			response.sendRedirect("login");
+			return;
+		}
+		if (session.getAttribute("ticketNotAvailable") != null) request.setAttribute("ticketNotAvailable", session.getAttribute("ticketNotAvailable"));
+        session.setAttribute("ticketNotAvailable", false);
+        if (session.getAttribute("checkSuccess") != null) request.setAttribute("checkSuccess", session.getAttribute("checkSuccess"));
+        session.setAttribute("checkSuccess", false);
+        if (session.getAttribute("checkFail") != null) request.setAttribute("checkFail", session.getAttribute("checkFail"));
+        session.setAttribute("checkFail", false);
+        if (session.getAttribute("ticketUsed") != null) request.setAttribute("ticketUsed", session.getAttribute("ticketUsed"));
+        session.setAttribute("ticketUsed", false);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("check.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void ticketCheckPost(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		HttpSession session = request.getSession();
+    	
+    	int ticket_id = Integer.parseInt(request.getParameter("ticket_id"));
+		int event_id = Integer.parseInt(request.getParameter("event_id"));
+		
+		
+		System.out.println(ticket_id);
 		System.out.println(event_id);
 		
-//		try {
-	        Ticket newTicket = new Ticket(user_id, event_id, ticket_used, ticket_purchased_time);
-	        Ticket complete = ticketDAO.insertTicket(newTicket);
-			response.sendRedirect("dashboard");
-//	        response.sendRedirect("buy?id=" + complete.getEvent_id());
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
-    }
+		Ticket newTicket = new Ticket(ticket_id, event_id);
+		int ret = ticketDAO.check(newTicket);
+		
+		if(ret == 0) {
+			session.setAttribute("ticketNotAvailable", true);
+    	} else if(ret == 1) {
+			session.setAttribute("checkSuccess", true);
+		} else if(ret == 2) {
+			session.setAttribute("checkFail", true);
+		} else {
+			session.setAttribute("ticketUsed", true);
+		}
+			
+		response.sendRedirect("check");
+	}
  
 }
