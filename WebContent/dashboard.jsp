@@ -9,7 +9,7 @@
 <title>Dashboard - events.co</title>
 <%@ include file="lib.jspf"%>
 </head>
-<body>
+<body style="background-color:#f8fafc;">
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);">
 		<a class="navbar-brand" href=".">events.co</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -50,7 +50,6 @@
                 <div class="card-header text-center" style="margin-top:20px; font-size:20px;">Actions</div>
                 <div class="card-body text-center d-flex flex-row justify-content-between w-75 mx-auto">
                     <a class="btn btn-success px-4" href="profile">My Profile</a>
-                    <a class="btn btn-success px-4" href="tickets">My Tickets</a>
                     <a class="btn btn-success px-4" href="create">Create new event</a>
                 </div>
             </div>
@@ -66,7 +65,7 @@
                                 <th style="border: none;">Event Start</th>
                                 <th style="border: none;">Event End</th>
                                 <th style="border: none;">Price</th>
-                                <th style="border: none;" colspan=3>Action</th>
+                                <th style="border: none;" colspan=2>Action</th>
                             </tr>
                         </thead>
                         
@@ -81,11 +80,11 @@
 				                    <td>
 										<c:choose>
 					                    	<c:when test="${id == event.user_id}">
-						                        <a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
-						                        <a class="pl-3" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
+						                        <a class="btn btn-primary" href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
+						                        <a class="btn btn-danger" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
 											</c:when>
 											<c:otherwise>
-						                        <a href="buy?id=<c:out value="${event.event_id}" />">Buy Ticket</a>
+						                        <a class="btn btn-warning" href="buy?id=<c:out value="${event.event_id}" />">Buy Ticket</a>
 						                    </c:otherwise>
 										</c:choose>
 				                    </td>

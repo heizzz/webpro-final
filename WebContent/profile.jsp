@@ -9,7 +9,7 @@
 <title>Profile - events.co</title>
 <%@ include file="lib.jspf"%>
 </head>
-<body>
+<body style="background-color:#f8fafc;">
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);">
 		<a class="navbar-brand" href=".">events.co</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -63,8 +63,8 @@
 										<td><fmt:formatDate value="${event.end_time}" type="both" dateStyle="long" timeStyle="medium" /></td>
 										<td><fmt:formatNumber value="${event.price}" pattern="IDR #,###" /></td>
 										<td>
-											<a href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
-											<a class="pl-3" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
+											<a class="btn btn-primary" href="edit?id=<c:out value="${event.event_id}" />">Edit</a>
+											<a class="btn btn-danger" href="delete?id=<c:out value="${event.event_id}" />">Delete</a>
 										</td>
 									</tr>
 								</c:forEach>

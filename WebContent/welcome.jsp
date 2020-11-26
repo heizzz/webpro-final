@@ -8,7 +8,7 @@
 <title>events.co</title>
 <%@ include file="lib.jspf"%>
 </head>
-<body>
+<body style="background-color:#f8fafc;">
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);">
 		<a class="navbar-brand" href="#">events.co</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -32,9 +32,10 @@
 	</nav>
 	<div class="hover py-5">
 		<div class="jumbotron w-75 mx-auto">
+		<img src="https://i.imgur.com/RTzWa8a.png" style="max-height:35%; max-width:35%;" class="mx-auto d-block">
 			<div class="w-50 mx-auto">
-				<h1 class="display-2">events.co</h1>
-				<p class="lead">Your one stop shop for online events!</p>
+				<h1 class="display-2" style="font-size:75px;">events.co</h1>
+				<p class="lead" style="font-size:25px;">Your one stop shop for online events!</p>
 				<hr class="my-4">
 				<p class="text-right">
 					<% if (session.getAttribute("name") == null) { %>
